@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Muon Elements Test</title>
+    <link rel="stylesheet" href="../dist/theme-combined.css"/>
+    <script src="../../Muon/dist/muon-dev.js"></script>
+    <script src="./test-lib/shadowify.js"></script>
+    <link rel="import" href="../dist/muon-elements-all.html"/>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      
+      /** Debug Draw **/
+      muon-box * {
+        border: 1px solid #F00;
+      }
+    </style>
+  </head>
+  <body>
+    <muon-shadowify src="./test-lib/font-awesome.css"></muon-shadowify>
+    <muon-box vertical fill>
+      <p>Buttons should be as tall as the container. Not sure how to do so though.</p>
+      <muon-box horizontal fill>
+        <muon-button main-icon="fa fa-times" fill=1></muon-button>
+        <muon-button fill='7'>Test Button with Text</muon-button>
+        <muon-box vertical fill>
+          <muon-button>Additional Test Button 1</muon-button>
+          <muon-button>Additional Test Button 1</muon-button>
+        </muon-box>
+      </muon-box>
+      <muon-box horizontal fill>
+        <muon-svg src="./resources/muon-full.svg"></muon-svg>
+        <muon-svg src="./resources/muon-icon.svg"></muon-svg>
+      </muon-box>
+    </muon-box>
+  </body>
+</html>

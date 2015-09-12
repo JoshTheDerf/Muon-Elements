@@ -1,0 +1,181 @@
+<muon-element tag-name=muon-v-box auto-register></muon-element><muon-element tag-name=muon-button shadow><template><span id=container class=flat><i id=mainIcon></i> <i id=leftIcon></i> <span id=text><content></content></span> <i id=rightIcon></i></span></template><script>
+(function() {
+  var recalculateProperties = function(element) {
+    var leftIcon = element.getAttribute('left-icon')
+    var rightIcon = element.getAttribute('right-icon')
+    var mainIcon = element.getAttribute('main-icon')
+    var fill = element.getAttribute('fill')
+    var _ = element.shadowRoot
+
+    if(leftIcon) _.getElementById('leftIcon').className = leftIcon
+    if(rightIcon) _.getElementById('rightIcon').className = rightIcon
+    if(mainIcon) _.getElementById('mainIcon').className = mainIcon
+    if(fill) element.style.flex = fill
+  }
+
+  Muon('muon-button', {
+    onCreated: function() {
+      recalculateProperties(this)
+    },
+    onAttributeChanged: function() {
+      recalculateProperties(this)
+    },
+  })
+})()
+
+</script></muon-element><muon-element tag-name=muon-shadowify><script>
+// TODO: Clean up and document.
+(function() {
+  var _Shadowify = window.Shadowify || (typeof global !== 'undefined' ? global.Shadowify : null)
+  if(!_Shadowify) return
+
+  var makeRequest = function(url, callback) {
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+      // Ready state must be completed, and the status must be 200 or 0 (for file:// urls).
+      if(xhr.readyState < 4 || (xhr.status !== 200 && xhr.status !== 0)) return
+
+      callback(xhr.responseText)
+    }
+
+    xhr.open('GET', url, true)
+    xhr.send('')
+  }
+
+  var fileCache = {}
+
+  var processSheet = function(src) {
+    var base64id = 'muon-shadowify-'+btoa(src)
+    var cachedText = fileCache[src]
+
+    var useElement = null
+    if(!document.getElementById(base64id)) {
+      useElement = document.createElement('style')
+      useElement.id = base64id
+      document.head.appendChild(useElement)
+    } else {
+      useElement = document.getElementById(base64id)
+    }
+    useElement.innerHTML = cachedText
+  }
+
+  var loadSheet = function(src, partial, deep) {
+    if(!fileCache[src]) {
+      fileCache[src] = true
+      makeRequest(src, function(text) {
+        // Woo for normalization.
+        var path = src
+        if(_Shadowify._isRelative(src)) {
+          path = _Shadowify._basename(window.location.pathname)+src
+        }
+
+        fileCache[src] = _Shadowify(text, partial, deep, path)
+        processSheet(src)
+      })
+    } else {
+      processSheet(src)
+    }
+  }
+
+  Muon('muon-shadowify', {
+    onCreated: function() {
+      this.src = this.getAttribute('src')
+      if(!this.src) return
+      this.classPartial = this.getAttribute('class-partial') || 'fa'
+      this.useNewDeep = this.hasAttribute('new-deep')
+
+      loadSheet(this.src, this.classPartial, this.useNewDeep)
+    },
+
+    onAttributeChanged: function(attr, oldValue, newValue) {
+      if(attr === 'src') {
+        this.src = newValue
+      } else if(attr === 'class-partial') {
+        this.classPartial = newValue
+      } else if(attr === 'new-deep') {
+        this.useNewDeep = newValue
+      }
+      loadSheet(this.src, this.classPartial, this.useNewDeep)
+    },
+  })
+})()
+
+</script></muon-element><muon-element tag-name=muon-svg><script>
+// TODO: Clean up and document.
+(function() {
+  var makeRequest = function(url, callback) {
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+      // Ready state must be completed, and the status must be 200 or 0 (for file:// urls).
+      if(xhr.readyState < 4 || (xhr.status !== 200 && xhr.status !== 0)) return
+
+      callback(xhr.responseText)
+    }
+
+    xhr.open('GET', url, true)
+    xhr.send('')
+  }
+
+  var svgCache = {}
+
+  var appendSVG = function(element, svgText) {
+    element.innerHTML = svgText
+  }
+
+  var loadSVG = function(element, src) {
+    if(!svgCache[src]) {
+      svgCache[src] = true
+
+      makeRequest(src, function(text) {
+        svgCache[src] = text
+        appendSVG(element, text)
+      })
+    } else {
+      // Elements will likely be created before the first load finishes,
+      // so observe the cache for the completion of the first load.
+      if(svgCache[src] === true) {
+        var cacheObserver = function(changes) {
+          changes.forEach(function(change) {
+            if(change.name === src && typeof change.object[src] === 'string') {
+              Object.unobserve(svgCache, cacheObserver)
+              appendSVG(element, svgCache[src])
+            }
+          })
+        }
+        Object.observe(svgCache, cacheObserver)
+      } else {
+        appendSVG(element, svgCache[src])
+      }
+    }
+  }
+
+  // Initialize the element.
+  Muon('muon-svg', {
+    onCreated: function() {
+      this.src = this.getAttribute('src')
+
+      if(this.src) {
+        loadSVG(this, this.src)
+      }
+
+      // Tie attribute and src property changes together. (There's gotta be a better way to do this.)
+      Object.observe(this, function(changes) {
+        changes.forEach(function(change) {
+          if(change.name === 'src') {
+            change.object.setAttribute('src', change.object.src)
+          }
+        })
+      })
+
+    },
+
+    onAttrChanged: function(attr, oldValue, newValue) {
+      if(attr === 'src') {
+        this.src = newValue
+      }
+      loadSVG(this, this.src)
+    },
+  })
+})()
+
+</script></muon-element>

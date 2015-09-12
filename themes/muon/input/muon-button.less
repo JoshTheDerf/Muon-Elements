@@ -1,0 +1,35 @@
+@import '../settings.less';
+
+muon-button::shadow {
+  #container {
+    // Style
+    border-radius: @border-radius;
+    color: @color-highlight;
+    transition: all @transition-duration-default;
+    
+    //Text
+    text-shadow: 0px 1px #FFF;
+    .element-action();
+    .outset();
+
+    &:hover {
+      .state-hover();
+      .element-action-default();
+      
+      &.flat {
+        .outset();
+      }
+    }
+    
+    &:active {
+      .inset();
+      &.flat {
+        .inset();
+      }
+    }
+    
+    &.flat {
+      box-shadow: none;
+    }
+  }
+}

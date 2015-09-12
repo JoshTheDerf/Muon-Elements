@@ -1,0 +1,74 @@
+/** Muon Default Theme Settings **/
+
+/** === Colors === **/
+@color-neutral-base: #AAA;
+@color-background: darken(@color-neutral-base, 10);
+@color-foreground: lighten(@color-neutral-base, 10);
+@color-state-light: lighten(@color-neutral-base, 15);
+@color-state-dark: darken(@color-neutral-base, 15);
+@color-text: darken(@color-neutral-base, 30);
+
+@color-highlight: #8800aa;
+
+@color-action-default: #4362D0;
+@color-action-safe: #0B9100;
+@color-action-warning: #FFA800;
+@color-action-danger: #C40000;
+
+/** === Animations and Transitions === **/
+@transition-duration-default: 150ms;
+@transition-delay-default: 0;
+
+/** === Borders === **/
+@border-radius: 2px;
+
+/** === State Mixins === **/
+.state-hover() {
+
+}
+
+.outset() {
+  box-shadow: 0px 0px 3px 0px @color-state-dark;
+}
+
+.inset() {
+  background-color: @color-state-light;
+  box-shadow: inset 0px 0px 3px 0px @color-state-dark;
+}
+
+.state-active() {
+  background-color: @color-state-dark;
+}
+
+.state-focused() {
+  outline: none !important;
+  box-shadow: 0 0 2px 0 @color-highlight;
+}
+
+.element-base() {
+  border-bottom: 3px solid transparent;
+}
+
+.element-action() {
+  border-bottom: 3px solid @color-highlight;
+}
+
+.element-action-default() {
+  color: @color-action-default;
+  border-bottom-color: @color-action-default;
+}
+
+.element-action-safe() {
+  color: @color-action-safe;
+  border-bottom-color: @color-action-safe;
+}
+
+.element-action-warning() {
+  color: @color-action-warning;
+  border-bottom-color: @color-action-warning;
+}
+
+.element-action-danger() {
+  color: @color-action-danger;
+  border-bottom-color: @color-action-danger;
+}

@@ -1,0 +1,59 @@
+@import '../settings.less';
+
+muon-button {
+  margin: @base-padding/2;
+  
+  &[fill] {
+    flex: 1;
+  }
+  
+  &::shadow {
+    #container {
+      // Display and position
+      display: flex;
+      box-sizing: border-box;
+      overflow: hidden;
+      align-items: center;
+      // Interaction
+      -webkit-user-select: none;
+      cursor: default;
+      // Sizing
+      height: 32px;
+      width: 100%;
+      padding: @base-padding;
+      // Text
+      font-family: sans-serif;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    i {
+      max-width: 26px;
+      max-height: 16px;
+      line-height: 100%;
+      text-align: center;
+      
+      &::before {
+        padding: @base-padding;
+      }
+    }
+    
+    #leftIcon {
+      &::before {
+        padding-left: @base-padding;
+      }
+    }
+    
+    
+    #rightIcon {
+      &::before {
+        padding-right: @base-padding;
+      }
+    }
+    
+    #text {
+      flex: 1;
+      text-align: center;
+    }
+  }
+}

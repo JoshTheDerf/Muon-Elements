@@ -1,0 +1,22 @@
+@import '../settings.less';
+
+muon-box {
+  display: inline-flex;
+  box-sizing: border-box;
+  padding: @base-padding;
+  
+  &[fill] {
+    display: flex;
+    align-items: stretch;
+  }
+  
+  flex-direction: row;
+  
+  &[vertical] {
+    flex-direction: column;
+  }
+  
+  &[horizontal] {
+    flex-direction: row;
+  }
+}
